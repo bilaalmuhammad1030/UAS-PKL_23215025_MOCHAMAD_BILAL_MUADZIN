@@ -176,7 +176,7 @@ Karena project berupa situs statis dan seluruh tautan menggunakan path relatif, 
 ## Link Deploy
 
 ```text
-https://nama-project.vercel.app
+https://uas-pkl-23215025-mochamad-bilal-mua.vercel.app
 ```
 
 Ganti alamat tersebut dengan tautan Vercel setelah proses deploy selesai.
