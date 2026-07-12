@@ -1,0 +1,47 @@
+.feature-list span,.toggle-password{transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease}.feature-list span:hover{transform:translateY(-3px);background:#ffffff24;box-shadow:0 8px 15px #00351d40}.toggle-password:hover{transform:scale(1.05);background:#dcefe4}.is-clicked{animation:loginClick .32s ease!important}@keyframes loginClick{0%{transform:scale(1)}45%{transform:scale(.96)}100%{transform:scale(1)}}@media(prefers-reduced-motion:reduce){.feature-list span,.toggle-password,.btn-login,.input-wrap input{transition:none}.is-clicked{animation:none!important}}
+
+/* Menjaga seluruh halaman login muat pada satu layar laptop. */
+@media (min-width:821px){
+  html,body{height:100%;overflow:hidden}
+  .login-page{height:100vh;min-height:0;padding:16px 24px}
+  .login-shell{height:min(680px,calc(100vh - 32px));min-height:0}
+  .login-intro{padding:34px 42px}
+  .school-mark{width:88px;height:88px;margin-bottom:19px;padding:6px;border-radius:20px}
+  .login-intro h1{margin:9px 0 11px;font-size:clamp(31px,3.25vw,43px)}
+  .login-intro p{font-size:14px;line-height:1.55}
+  .feature-list{margin-top:19px;gap:7px}
+  .feature-list span{padding:6px 9px;font-size:11px}
+  .login-form-side{padding:30px 52px}
+  .form-heading{margin-bottom:20px}
+  .welcome-icon{width:36px;height:36px;font-size:17px}
+  .form-heading h2{margin:10px 0 5px;font-size:27px}
+  .form-group{margin-bottom:13px}
+  .form-group label,.label-row span{margin-bottom:6px}
+  .input-wrap input{height:45px}
+  .toggle-password{top:5px}
+  .login-message{min-height:17px;margin:-2px 0 6px}
+  .btn-login{height:46px}
+  .login-footer{margin-top:22px}
+}
+
+/* Penyempurnaan hierarki tulisan pada panel identitas. */
+.intro-content{max-width:500px}
+.eyebrow{display:inline-block;position:relative;padding-left:25px;line-height:1.4}
+.eyebrow:before{content:"";position:absolute;left:0;top:50%;width:15px;height:2px;border-radius:2px;background:#f8dd67;transform:translateY(-50%)}
+.login-intro h1{max-width:500px;text-wrap:balance}
+.login-intro p{max-width:470px;text-wrap:pretty}
+.feature-list span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.feature-list span b{display:inline-grid;width:17px;height:17px;place-items:center;border-radius:50%;color:#075d34;background:#fff;font-size:10px}
+.input-wrap input{padding-right:112px}.toggle-password{min-width:48px}
+@media (min-width:821px) and (max-height:700px){
+  .login-shell{height:calc(100vh - 20px)}
+  .login-page{padding:10px 20px}
+  .login-intro{padding:25px 36px}
+  .school-mark{width:72px;height:72px;margin-bottom:12px}
+  .login-intro h1{font-size:34px}
+  .feature-list{margin-top:12px}
+  .login-form-side{padding:20px 46px}
+  .welcome-icon{display:none}
+  .form-heading{margin-bottom:15px}
+  .login-footer{margin-top:9px}
+}

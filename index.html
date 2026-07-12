@@ -1,93 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Login Admin | MA Mambaul Hikmah</title>
-
-    <link rel="stylesheet" href="login.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b6b3a">
+  <title>Login | Administrasi Soal MA</title>
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/animations.css">
 </head>
-
 <body>
-
-    <main class="login-container">
-
-        <section class="login-card">
-
-            <div class="logo-placeholder">
-                MA
-            </div>
-
-            <h1>Login Admin</h1>
-
-            <h2>
-                Sistem Administrasi dan Pengelolaan
-                Soal Ujian Semester
-            </h2>
-
-            <p class="nama-sekolah">
-                MA Mambaul Hikmah
-            </p>
-
-            <form id="formLogin">
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Masukkan username"
-                        autocomplete="username"
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Masukkan password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            id="lihatPassword"
-                            class="btn-lihat"
-                        >
-                            Lihat
-                        </button>
-                    </div>
-                </div>
-
-                <p id="pesanLogin" class="pesan-login"></p>
-
-                <button type="submit" class="btn-login">
-                    Masuk ke Sistem
-                </button>
-
-            </form>
-
-            <div class="info-login">
-                <p>Username demo: <strong>admin</strong></p>
-                <p>Password demo: <strong>admin123</strong></p>
-            </div>
-
-            <p class="copyright">
-                Mochamad Bilal Muadzin — 23215025
-            </p>
-
-        </section>
-
-    </main>
-
-    <script src="login.js"></script>
-
+  <main class="login-page">
+    <section class="login-shell">
+      <div class="login-intro">
+        <div class="intro-content">
+          <div class="school-mark"><img src="assets/logo-ma.png" alt="Logo resmi MA Mambaul Hikmah"></div>
+          <span class="eyebrow">Sistem Administrasi Akademik</span>
+          <h1>Pengelolaan Soal<br>Ujian Semester</h1>
+          <p>Kelola proses pengumpulan, verifikasi, dan rekapitulasi soal ujian secara tertib dalam satu sistem.</p>
+          <div class="feature-list"><span><b>✓</b> Data Terpusat</span><span><b>✓</b> Rekapitulasi Otomatis</span><span><b>✓</b> Mudah Digunakan</span></div>
+        </div>
+        <div class="intro-footer">MA Mambaul Hikmah · Kabupaten Tegal</div>
+      </div>
+      <div class="login-form-side">
+        <div class="mobile-brand"><img src="assets/logo-ma.png" alt="Logo MA Mambaul Hikmah"><div><strong>MA Mambaul Hikmah</strong><span>Administrasi Soal Ujian</span></div></div>
+        <div class="form-heading"><span class="welcome-icon">👋</span><h2>Selamat Datang</h2><p>Silakan masuk menggunakan akun administrator untuk melanjutkan.</p></div>
+        <form id="loginForm">
+          <div class="form-group"><label for="username">Nama Pengguna</label><div class="input-wrap"><span class="input-icon">👤</span><input id="username" autocomplete="username" required placeholder="Masukkan nama pengguna" autofocus></div></div>
+          <div class="form-group"><label for="password">Kata Sandi</label><div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="password" autocomplete="current-password" required placeholder="Masukkan kata sandi"><button class="toggle-password" type="button" id="togglePassword" aria-label="Tampilkan kata sandi">Lihat</button></div></div>
+          <p id="loginMessage" class="login-message" aria-live="polite"></p>
+          <button class="btn-login" type="submit"><span>Masuk ke Sistem</span><span>→</span></button>
+        </form>
+        <div class="login-footer">Copyright © 2026 By 23215025-Mochamad Bilal Muadzin</div>
+      </div>
+    </section>
+  </main>
+  <script src="js/login.js"></script>
 </body>
 </html>
