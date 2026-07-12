@@ -3,169 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Pengelolaan Soal Ujian</title>
-    <link rel="stylesheet" href="style.css">
+
+    <title>Login Admin | MA Mambaul Hikmah</title>
+
+    <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
 
-    <header class="header">
-        <div>
-            <h1>Sistem Administrasi Soal Ujian Semester</h1>
-            <p>MA Mambaul Hikmah</p>
-        </div>
-    </header>
+    <main class="login-container">
 
-    <main class="container">
+        <section class="login-card">
 
-        <section class="dashboard">
-            <div class="card">
-                <h3>Total Data</h3>
-                <p id="totalData">0</p>
+            <div class="logo-placeholder">
+                MA
             </div>
 
-            <div class="card">
-                <h3>Disetujui</h3>
-                <p id="totalDisetujui">0</p>
-            </div>
+            <h1>Login Admin</h1>
 
-            <div class="card">
-                <h3>Perlu Revisi</h3>
-                <p id="totalRevisi">0</p>
-            </div>
+            <h2>
+                Sistem Administrasi dan Pengelolaan
+                Soal Ujian Semester
+            </h2>
 
-            <div class="card">
-                <h3>Menunggu</h3>
-                <p id="totalMenunggu">0</p>
-            </div>
-        </section>
+            <p class="nama-sekolah">
+                MA Mambaul Hikmah
+            </p>
 
-        <section class="panel">
-            <h2>Form Pengumpulan Soal</h2>
+            <form id="formLogin">
 
-            <form id="formSoal">
-                <div class="form-grid">
+                <div class="form-group">
+                    <label for="username">Username</label>
 
-                    <div class="form-group">
-                        <label for="namaGuru">Nama Guru</label>
-                        <input
-                            type="text"
-                            id="namaGuru"
-                            placeholder="Masukkan nama guru"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mataPelajaran">Mata Pelajaran</label>
-                        <input
-                            type="text"
-                            id="mataPelajaran"
-                            placeholder="Masukkan mata pelajaran"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="kelas">Kelas</label>
-                        <select id="kelas" required>
-                            <option value="">Pilih kelas</option>
-                            <option value="X">Kelas X</option>
-                            <option value="XI">Kelas XI</option>
-                            <option value="XII">Kelas XII</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="semester">Semester</label>
-                        <select id="semester" required>
-                            <option value="">Pilih semester</option>
-                            <option value="Ganjil">Ganjil</option>
-                            <option value="Genap">Genap</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tanggal">Tanggal Pengumpulan</label>
-                        <input type="date" id="tanggal" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status">Status Verifikasi</label>
-                        <select id="status" required>
-                            <option value="Menunggu Verifikasi">
-                                Menunggu Verifikasi
-                            </option>
-                            <option value="Disetujui">Disetujui</option>
-                            <option value="Perlu Revisi">Perlu Revisi</option>
-                        </select>
-                    </div>
-
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    Simpan Data
-                </button>
-            </form>
-        </section>
-
-        <section class="panel">
-            <div class="table-header">
-                <div>
-                    <h2>Rekap Pengumpulan Soal</h2>
-                    <p>Data administrasi soal ujian semester</p>
-                </div>
-
-                <div class="table-actions">
                     <input
                         type="text"
-                        id="pencarian"
-                        placeholder="Cari nama guru atau mapel"
+                        id="username"
+                        placeholder="Masukkan username"
+                        autocomplete="username"
+                        required
                     >
-
-                    <button
-                        type="button"
-                        class="btn-print"
-                        onclick="window.print()"
-                    >
-                        Cetak Laporan
-                    </button>
                 </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Masukkan password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="lihatPassword"
+                            class="btn-lihat"
+                        >
+                            Lihat
+                        </button>
+                    </div>
+                </div>
+
+                <p id="pesanLogin" class="pesan-login"></p>
+
+                <button type="submit" class="btn-login">
+                    Masuk ke Sistem
+                </button>
+
+            </form>
+
+            <div class="info-login">
+                <p>Username demo: <strong>admin</strong></p>
+                <p>Password demo: <strong>admin123</strong></p>
             </div>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama Guru</th>
-                            <th>Mata Pelajaran</th>
-                            <th>Kelas</th>
-                            <th>Semester</th>
-                            <th>Tanggal</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
+            <p class="copyright">
+                Mochamad Bilal Muadzin — 23215025
+            </p>
 
-                    <tbody id="tabelSoal">
-                        <tr>
-                            <td colspan="8" class="data-kosong">
-                                Belum ada data pengumpulan soal.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </section>
 
     </main>
 
-    <footer>
-        <p>
-            Mochamad Bilal Muadzin — NIM 23215025
-        </p>
-    </footer>
+    <script src="login.js"></script>
 
-    <script src="script.js"></script>
 </body>
 </html>
