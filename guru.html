@@ -5,7 +5,7 @@
 <section class="panel"><h3 id="formTitle">Tambah Guru</h3><form id="guruForm"><input type="hidden" id="editId"><div class="form-grid">
 <div class="form-group"><label>Nama Guru</label><input id="nama" required maxlength="80" placeholder="Masukkan nama lengkap beserta gelar"></div>
 <div class="form-group"><label>NIP / Kode Guru Internal</label><input id="kode" required maxlength="30" placeholder="Contoh: MA-MH-GR-001"><small class="field-hint">Gunakan NIP resmi jika tersedia. Jika tidak, gunakan kode internal madrasah.</small></div>
-<div class="form-group"><label>Nomor Telepon</label><input id="telepon" required inputmode="tel" pattern="[0-9+ -]{8,22}" placeholder="Contoh: +62 812-3456-7890"></div>
+<div class="form-group"><label>Nomor Telepon</label><input id="telepon" required inputmode="tel" pattern="0[0-9 -]{7,19}" placeholder="Contoh: 0812-3456-7890" title="Nomor telepon harus diawali angka 0"></div>
 <div class="form-group"><label>Mata Pelajaran Utama</label><input id="mapelUtama" required maxlength="60"></div></div>
 <div class="form-actions"><button class="btn btn-primary" type="submit">Simpan</button><button class="btn btn-secondary" type="button" id="cancelEdit" hidden>Batal Edit</button></div></form></section>
 <section class="panel"><div class="panel-title"><h3>Daftar Guru</h3></div><div class="filters" style="grid-template-columns:1fr"><input id="search" placeholder="Cari nama, NIP, kode, atau mata pelajaran..."></div><div class="table-wrap"><table><thead><tr><th>No.</th><th>Nama Guru</th><th>NIP / Kode Guru Internal</th><th>Nomor Telepon</th><th>Mata Pelajaran Utama</th><th>Aksi</th></tr></thead><tbody id="guruTable"></tbody></table></div></section></main>

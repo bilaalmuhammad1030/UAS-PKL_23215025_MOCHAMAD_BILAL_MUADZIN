@@ -26,5 +26,5 @@ document.addEventListener('DOMContentLoaded',function(){
       form.classList.add('login-shake');
     }
   });
-  document.addEventListener('pointerdown',function(e){var target=e.target.closest('button,input,.feature-list span');if(!target)return;target.classList.remove('is-clicked');void target.offsetWidth;target.classList.add('is-clicked');setTimeout(function(){target.classList.remove('is-clicked')},320)});
+  document.addEventListener('pointerdown',function(e){var target=e.target.closest('button,.feature-list span');if(!target||!target.animate||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;target.animate([{transform:'scale(1)'},{transform:'scale(.96)',offset:.45},{transform:'scale(1)'}],{duration:220,easing:'ease-out'})});
 });
