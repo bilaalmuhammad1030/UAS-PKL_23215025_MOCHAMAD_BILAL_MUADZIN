@@ -1,1 +1,150 @@
-document.addEventListener('DOMContentLoaded',function(){var form=document.getElementById('collectForm');function guru(){return App.get('dataGuru')}function mapel(){return App.get('dataMapel')}function choices(gs,ms){guruId.innerHTML='<option value="">Pilih guru</option>'+guru().map(function(x){return'<option value="'+x.id+'" '+(x.id===gs?'selected':'')+'>'+App.esc(x.nama)+'</option>'}).join('');mapelId.innerHTML='<option value="">Pilih mata pelajaran</option>'+mapel().map(function(x){return'<option value="'+x.id+'" '+(x.id===ms?'selected':'')+'>'+App.esc(x.nama)+' - Kelas '+App.esc(x.kelas)+'</option>'}).join('')}function reset(){form.reset();editId.value='';formTitle.textContent='Tambah Pengumpulan';cancelEdit.hidden=true;choices();tanggal.value=new Date().toISOString().slice(0,10)}function render(){var g=guru(),m=mapel(),q=search.value.toLowerCase(),fs=filterStatus.value,fk=filterKelas.value,data=App.get('dataPengumpulan').filter(function(x){var gn=g.find(function(v){return v.id===x.guruId}),mn=m.find(function(v){return v.id===x.mapelId});return(!fs||x.status===fs)&&(!fk||x.kelas===fk)&&((gn?gn.nama:'')+' '+(mn?mn.nama:'')+' '+x.catatan+' '+x.tahun).toLowerCase().includes(q)});collectTable.innerHTML=data.length?data.map(function(x,i){var gn=g.find(function(v){return v.id===x.guruId}),mn=m.find(function(v){return v.id===x.mapelId});return'<tr><td>'+(i+1)+'</td><td>'+App.esc(gn?gn.nama:'Data guru dihapus')+'</td><td>'+App.esc(mn?mn.nama:'Data mapel dihapus')+'</td><td>'+App.esc(x.kelas)+'</td><td>'+App.esc(x.semester)+'</td><td>'+App.esc(x.tahun)+'</td><td>'+App.esc(x.tanggal)+'</td><td><span class="badge '+App.statusClass(x.status)+'">'+App.esc(x.status)+'</span></td><td>'+App.esc(x.catatan||'-')+'</td><td><div class="actions"><button class="btn btn-small btn-secondary" data-edit="'+x.id+'">Edit</button><button class="btn btn-small btn-danger" data-del="'+x.id+'">Hapus</button></div></td></tr>'}).join(''):'<tr><td colspan="10" class="empty">Data pengumpulan tidak ditemukan.</td></tr>'}mapelId.onchange=function(){var x=mapel().find(function(v){return v.id===mapelId.value});if(x){kelas.value=x.kelas;if(!guruId.value)guruId.value=x.guruId}};form.onsubmit=function(e){e.preventDefault();var data=App.get('dataPengumpulan'),id=editId.value,item={id:id||App.id('p'),guruId:guruId.value,mapelId:mapelId.value,kelas:kelas.value,semester:semester.value,tahun:tahun.value.trim(),tanggal:tanggal.value,status:status.value,catatan:catatan.value.trim()};if(id)data=data.map(function(x){return x.id===id?item:x});else data.push(item);App.set('dataPengumpulan',data);App.toast(id?'Pengumpulan diperbarui.':'Pengumpulan berhasil ditambahkan.');reset();render()};collectTable.onclick=function(e){var id=e.target.dataset.edit||e.target.dataset.del;if(!id)return;var data=App.get('dataPengumpulan'),x=data.find(function(v){return v.id===id});if(e.target.dataset.edit){editId.value=x.id;choices(x.guruId,x.mapelId);kelas.value=x.kelas;semester.value=x.semester;tahun.value=x.tahun;tanggal.value=x.tanggal;status.value=x.status;catatan.value=x.catatan||'';formTitle.textContent='Edit Pengumpulan';cancelEdit.hidden=false;scrollTo({top:0,behavior:'smooth'})}else if(confirm('Hapus data pengumpulan ini?')){App.set('dataPengumpulan',data.filter(function(v){return v.id!==id}));App.toast('Data pengumpulan dihapus.');render()}};[search,filterStatus,filterKelas].forEach(function(x){x.oninput=render;x.onchange=render});cancelEdit.onclick=reset;reset();render()});
+document.addEventListener('DOMContentLoaded', function () {
+  var form = document.getElementById('collectForm');
+  var editIdInput = document.getElementById('editId');
+  var formTitle = document.getElementById('formTitle');
+  var guruSelect = document.getElementById('guruId');
+  var mapelSelect = document.getElementById('mapelId');
+  var kelasSelect = document.getElementById('kelas');
+  var semesterSelect = document.getElementById('semester');
+  var tahunInput = document.getElementById('tahun');
+  var tanggalInput = document.getElementById('tanggal');
+  var statusSelect = document.getElementById('status');
+  var catatanInput = document.getElementById('catatan');
+  var cancelEdit = document.getElementById('cancelEdit');
+  var searchInput = document.getElementById('search');
+  var statusFilter = document.getElementById('filterStatus');
+  var kelasFilter = document.getElementById('filterKelas');
+  var tableBody = document.getElementById('collectTable');
+
+  function guru() {
+    return App.get('dataGuru');
+  }
+
+  function mapel() {
+    return App.get('dataMapel');
+  }
+
+  function choices(selectedGuru, selectedMapel) {
+    guruSelect.innerHTML = '<option value="">Pilih guru</option>' + guru().map(function (item) {
+      return '<option value="' + item.id + '" ' + (item.id === selectedGuru ? 'selected' : '') + '>' + App.esc(item.nama) + '</option>';
+    }).join('');
+
+    mapelSelect.innerHTML = '<option value="">Pilih mata pelajaran</option>' + mapel().map(function (item) {
+      return '<option value="' + item.id + '" ' + (item.id === selectedMapel ? 'selected' : '') + '>' + App.esc(item.nama) + ' - Kelas ' + App.esc(item.kelas) + '</option>';
+    }).join('');
+  }
+
+  function resetForm() {
+    form.reset();
+    editIdInput.value = '';
+    formTitle.textContent = 'Tambah Pengumpulan';
+    cancelEdit.hidden = true;
+    choices('', '');
+    tanggalInput.value = new Date().toISOString().slice(0, 10);
+    statusSelect.value = 'Menunggu Verifikasi';
+  }
+
+  function render() {
+    var dataGuru = guru();
+    var dataMapel = mapel();
+    var query = searchInput.value.toLowerCase();
+    var selectedStatus = statusFilter.value;
+    var selectedKelas = kelasFilter.value;
+
+    var data = App.get('dataPengumpulan').filter(function (item) {
+      var guruItem = dataGuru.find(function (value) { return value.id === item.guruId; });
+      var mapelItem = dataMapel.find(function (value) { return value.id === item.mapelId; });
+      var text = (guruItem ? guruItem.nama : '') + ' ' + (mapelItem ? mapelItem.nama : '') + ' ' + (item.catatan || '') + ' ' + item.tahun;
+      return (!selectedStatus || item.status === selectedStatus) &&
+        (!selectedKelas || item.kelas === selectedKelas) &&
+        text.toLowerCase().includes(query);
+    });
+
+    tableBody.innerHTML = data.length ? data.map(function (item, index) {
+      var guruItem = dataGuru.find(function (value) { return value.id === item.guruId; });
+      var mapelItem = dataMapel.find(function (value) { return value.id === item.mapelId; });
+      return '<tr><td>' + (index + 1) + '</td>' +
+        '<td>' + App.esc(guruItem ? guruItem.nama : 'Data guru dihapus') + '</td>' +
+        '<td>' + App.esc(mapelItem ? mapelItem.nama : 'Data mapel dihapus') + '</td>' +
+        '<td>' + App.esc(item.kelas) + '</td>' +
+        '<td>' + App.esc(item.semester) + '</td>' +
+        '<td>' + App.esc(item.tahun) + '</td>' +
+        '<td>' + App.esc(item.tanggal) + '</td>' +
+        '<td><span class="badge ' + App.statusClass(item.status) + '">' + App.esc(item.status) + '</span></td>' +
+        '<td>' + App.esc(item.catatan || '-') + '</td>' +
+        '<td><div class="actions"><button class="btn btn-small btn-secondary" data-edit="' + item.id + '">Edit</button><button class="btn btn-small btn-danger" data-del="' + item.id + '">Hapus</button></div></td></tr>';
+    }).join('') : '<tr><td colspan="10" class="empty">Data pengumpulan tidak ditemukan.</td></tr>';
+  }
+
+  mapelSelect.addEventListener('change', function () {
+    var selected = mapel().find(function (item) { return item.id === mapelSelect.value; });
+    if (selected) {
+      kelasSelect.value = selected.kelas;
+      if (!guruSelect.value) guruSelect.value = selected.guruId;
+    }
+  });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var data = App.get('dataPengumpulan');
+    var editId = editIdInput.value;
+    var item = {
+      id: editId || App.id('p'),
+      guruId: guruSelect.value,
+      mapelId: mapelSelect.value,
+      kelas: kelasSelect.value,
+      semester: semesterSelect.value,
+      tahun: tahunInput.value.trim(),
+      tanggal: tanggalInput.value,
+      status: statusSelect.value,
+      catatan: catatanInput.value.trim()
+    };
+
+    if (editId) {
+      data = data.map(function (value) { return value.id === editId ? item : value; });
+    } else {
+      data.push(item);
+    }
+
+    App.set('dataPengumpulan', data);
+    App.success(editId ? 'Data pengumpulan berhasil diperbarui.' : 'Data pengumpulan berhasil ditambahkan.');
+    resetForm();
+    render();
+  });
+
+  tableBody.addEventListener('click', function (event) {
+    var id = event.target.dataset.edit || event.target.dataset.del;
+    if (!id) return;
+
+    var data = App.get('dataPengumpulan');
+    var item = data.find(function (value) { return value.id === id; });
+    if (!item) return;
+
+    if (event.target.dataset.edit) {
+      editIdInput.value = item.id;
+      choices(item.guruId, item.mapelId);
+      kelasSelect.value = item.kelas;
+      semesterSelect.value = item.semester;
+      tahunInput.value = item.tahun;
+      tanggalInput.value = item.tanggal;
+      statusSelect.value = item.status || 'Menunggu Verifikasi';
+      catatanInput.value = item.catatan || '';
+      formTitle.textContent = 'Edit Pengumpulan';
+      cancelEdit.hidden = false;
+      scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (confirm('Hapus data pengumpulan ini?')) {
+      App.set('dataPengumpulan', data.filter(function (value) { return value.id !== id; }));
+      App.toast('Data pengumpulan dihapus.');
+      render();
+    }
+  });
+
+  [searchInput, statusFilter, kelasFilter].forEach(function (element) {
+    element.addEventListener('input', render);
+    element.addEventListener('change', render);
+  });
+
+  cancelEdit.addEventListener('click', resetForm);
+  resetForm();
+  render();
+});

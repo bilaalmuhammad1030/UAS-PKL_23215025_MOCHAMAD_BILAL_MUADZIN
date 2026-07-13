@@ -55,14 +55,99 @@
     localStorage.setItem('dataPengumpulan',JSON.stringify(kumpul));
     localStorage.setItem('dataVersion',dataVersion);
   }
+  // Perbaiki data lama yang statusnya kosong agar badge tetap memiliki label.
+  try{
+    var savedPengumpulan=JSON.parse(localStorage.getItem('dataPengumpulan'))||[];
+    var repairedStatus=false;
+    savedPengumpulan.forEach(function(item){
+      if(!item.status||!String(item.status).trim()){
+        item.status='Menunggu Verifikasi';
+        repairedStatus=true;
+      }
+    });
+    if(repairedStatus)localStorage.setItem('dataPengumpulan',JSON.stringify(savedPengumpulan));
+  }catch(e){}
   window.App={
     get:function(key){try{return JSON.parse(localStorage.getItem(key))||[]}catch(e){return[]}},
     set:function(key,val){localStorage.setItem(key,JSON.stringify(val))},
     id:function(prefix){return prefix+Date.now()+Math.random().toString(16).slice(2)},
     esc:function(v){return String(v==null?'':v).replace(/[&<>'"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})},
-    toast:function(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(function(){t.classList.remove('show')},2200)},
+    toast:function(msg){if(/ditambah|diperbarui/i.test(msg)){this.success(msg);return}var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(function(){t.classList.remove('show')},2200)},
+    success:function(msg){
+      var box=document.getElementById('successCelebration');
+      if(!box){
+        box=document.createElement('div');
+        box.id='successCelebration';
+        box.className='success-celebration';
+        box.setAttribute('role','status');
+        box.setAttribute('aria-live','polite');
+        box.innerHTML='<div class="success-card"><div class="success-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="success-check" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"></circle><path d="M14 27l8 8 17-18"></path></svg></div><strong>Berhasil!</strong><p></p><div class="success-progress" aria-hidden="true"><span></span></div></div>';
+        document.body.appendChild(box);
+      }
+      box.querySelector('p').textContent=msg;
+      clearTimeout(window._successTimer);
+      box.classList.remove('show');
+      void box.offsetWidth;
+      box.classList.add('show');
+      window._successTimer=setTimeout(function(){box.classList.remove('show')},1900);
+    },
     statusClass:function(s){return s==='Disetujui'?'approved':s==='Perlu Revisi'?'revision':'waiting'},
-    layout:function(){document.querySelectorAll('[data-logout]').forEach(function(b){b.onclick=function(){sessionStorage.removeItem('isLoggedIn');location.replace('index.html')}});var toggle=document.getElementById('menuToggle'),side=document.querySelector('.sidebar'),back=document.querySelector('.sidebar-backdrop');if(toggle)toggle.onclick=function(){side.classList.toggle('open');back.classList.toggle('show')};if(back)back.onclick=function(){side.classList.remove('open');back.classList.remove('show')};}
+    layout:function(){
+      document.querySelectorAll('[data-logout]').forEach(function(button){
+        button.onclick=function(){sessionStorage.removeItem('isLoggedIn');location.replace('index.html')};
+      });
+      var toggle=document.getElementById('menuToggle');
+      var side=document.querySelector('.sidebar');
+      var back=document.querySelector('.sidebar-backdrop');
+      if(!toggle||!side)return;
+
+      toggle.textContent='';
+      toggle.setAttribute('aria-label','Buka menu navigasi');
+      toggle.setAttribute('aria-controls','mainSidebar');
+      toggle.setAttribute('aria-expanded','true');
+      toggle.setAttribute('title','Buka atau tutup menu');
+      side.id='mainSidebar';
+      side.querySelectorAll('.nav a').forEach(function(link){
+        var label=link.textContent.trim();
+        var parts=label.split(/\s+/);
+        var icon=parts.shift();
+        link.innerHTML='<span class="nav-icon" aria-hidden="true">'+icon+'</span><span class="nav-label">'+parts.join(' ')+'</span>';
+        link.setAttribute('aria-label',parts.join(' '));
+        link.setAttribute('title',parts.join(' '));
+      });
+
+      function mobile(){return window.matchMedia('(max-width: 900px)').matches}
+      function updateButton(open){
+        toggle.setAttribute('aria-expanded',String(open));
+        toggle.setAttribute('aria-label',open?'Tutup menu navigasi':'Buka menu navigasi');
+      }
+      function closeMobileMenu(){
+        side.classList.remove('open');
+        if(back)back.classList.remove('show');
+        updateButton(false);
+      }
+
+      toggle.onclick=function(){
+        if(mobile()){
+          var isOpen=side.classList.toggle('open');
+          if(back)back.classList.toggle('show',isOpen);
+          updateButton(isOpen);
+        }else{
+          document.body.classList.toggle('sidebar-collapsed');
+          updateButton(!document.body.classList.contains('sidebar-collapsed'));
+        }
+      };
+      if(back)back.onclick=closeMobileMenu;
+      document.addEventListener('keydown',function(event){
+        if(event.key==='Escape'&&mobile())closeMobileMenu();
+      });
+      window.addEventListener('resize',function(){
+        side.classList.remove('open');
+        if(back)back.classList.remove('show');
+        updateButton(mobile()?false:!document.body.classList.contains('sidebar-collapsed'));
+      });
+      updateButton(mobile()?false:true);
+    }
   };
   document.addEventListener('DOMContentLoaded',function(){
     App.layout();
